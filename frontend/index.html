@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>LinguaAI — Neural Translator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Animated gradient background blobs -->
+  <div class="blob-container">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+    <div class="blob blob-4"></div>
+    <div class="blob blob-5"></div>
+  </div>
+
+  <div class="app-wrapper">
+
+    <!-- Header -->
+    <header class="header glass-card">
+      <div class="logo">
+        <div class="logo-orb">L</div>
+        <div class="logo-text-wrap">
+          <span class="logo-name">Lingua<em>AI</em></span>
+          <span class="logo-sub">Neural Translation Engine</span>
+        </div>
+      </div>
+      <div class="header-right">
+        <div class="status-pill">
+          <span class="status-dot"></span>
+          <span>Backend Live</span>
+        </div>
+        <div class="model-pill">Helsinki-NLP · opus-mt</div>
+      </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="hero-badge">✦ AI-Powered &nbsp;·&nbsp; Offline &nbsp;·&nbsp; Real-time</div>
+      <h1 class="hero-title">
+        Translate Anything,<br/>
+        <span class="gradient-text">Instantly.</span>
+      </h1>
+      <p class="hero-desc">
+        Powered by Seq2Seq Transformer models. Auto-detects your language. No internet needed after setup.
+      </p>
+    </section>
+
+    <!-- Main Translator -->
+    <main class="translator glass-card">
+
+      <!-- Language Selector Bar -->
+      <div class="lang-bar">
+
+        <div class="lang-box detected-side">
+          <div class="lang-box-label">Detected Language</div>
+          <div class="lang-display" id="detectedBox">
+            <span class="lang-flag" id="detectedFlag">🌐</span>
+            <span class="lang-name" id="detectedLangName">Auto Detecting…</span>
+          </div>
+        </div>
+
+        <button class="swap-btn" id="swapBtn" title="Swap">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M7 16V4m0 0L3 8m4-4l4 4M17 8v12m0 0l4-4m-4 4l-4-4"/>
+          </svg>
+        </button>
+
+        <div class="lang-box target-side">
+          <div class="lang-box-label">Translate To</div>
+          <div class="select-wrap">
+            <select class="lang-select" id="targetLang">
+              <option value="fr">🇫🇷  French</option>
+              <option value="de">🇩🇪  German</option>
+              <option value="es">🇪🇸  Spanish</option>
+              <option value="it">🇮🇹  Italian</option>
+              <option value="pt">🇵🇹  Portuguese</option>
+              <option value="hi">🇮🇳  Hindi</option>
+              <option value="ar">🇸🇦  Arabic</option>
+              <option value="ru">🇷🇺  Russian</option>
+              <option value="nl">🇳🇱  Dutch</option>
+              <option value="en">🇬🇧  English</option>
+            </select>
+            <span class="select-chevron">▾</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Divider -->
+      <div class="section-divider"></div>
+
+      <!-- Text Panels -->
+      <div class="panels-wrap">
+
+        <!-- Input -->
+        <div class="text-panel input-panel">
+          <div class="panel-header">
+            <span class="panel-label">
+              <span class="panel-dot input-dot"></span>
+              Source Text
+            </span>
+            <div class="panel-actions">
+              <button class="action-btn" id="speakSourceBtn">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+                Speak
+              </button>
+              <button class="action-btn red-btn" id="clearBtn">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                Clear
+              </button>
+            </div>
+          </div>
+          <textarea
+            id="inputText"
+            class="text-input"
+            placeholder="Type or paste your text here…&#10;&#10;Ctrl + Enter to translate"
+            maxlength="1000"
+            spellcheck="false"
+          ></textarea>
+          <div class="panel-footer">
+            <div class="char-track">
+              <div class="char-progress" id="charFill"></div>
+            </div>
+            <span class="char-label"><span id="charCount">0</span> / 1000</span>
+          </div>
+        </div>
+
+        <!-- Vertical Divider -->
+        <div class="v-divider">
+          <div class="v-line"></div>
+          <div class="v-badge">⇄</div>
+          <div class="v-line"></div>
+        </div>
+
+        <!-- Output -->
+        <div class="text-panel output-panel">
+          <div class="panel-header">
+            <span class="panel-label">
+              <span class="panel-dot output-dot"></span>
+              Translation
+            </span>
+            <div class="panel-actions">
+              <button class="action-btn" id="speakOutputBtn">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+                Speak
+              </button>
+              <button class="action-btn blue-btn" id="copyBtn">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                Copy
+              </button>
+            </div>
+          </div>
+          <div class="text-output" id="outputText">
+            <div class="empty-state">
+              <div class="empty-icon">✦</div>
+              <p class="empty-title">Ready to translate</p>
+              <p class="empty-sub">Select a target language and hit Translate</p>
+            </div>
+          </div>
+          <div class="panel-footer">
+            <span class="model-badge" id="modelTag">
+              <span class="badge-dot"></span>
+              Helsinki-NLP/opus-mt
+            </span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Translate Button -->
+      <div class="action-row">
+        <button class="translate-btn" id="translateBtn">
+          <span class="btn-shine"></span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          <span id="btnLabel">Translate Now</span>
+          <div class="spinner" id="btnSpinner"></div>
+        </button>
+        <p class="shortcut-hint">or press <kbd>Ctrl</kbd> + <kbd>Enter</kbd></p>
+      </div>
+
+    </main>
+
+    <!-- AI Concepts Cards -->
+    <section class="features">
+      <div class="feat-card glass-card">
+        <div class="feat-icon purple-grad">🧠</div>
+        <h3>Seq2Seq Model</h3>
+        <p>Encoder-decoder transformer reads full sentences, not word-by-word for natural output</p>
+      </div>
+      <div class="feat-card glass-card">
+        <div class="feat-icon pink-grad">🔍</div>
+        <h3>Auto Detection</h3>
+        <p>langdetect identifies your source language automatically using statistical models</p>
+      </div>
+      <div class="feat-card glass-card">
+        <div class="feat-icon blue-grad">📦</div>
+        <h3>Fully Offline</h3>
+        <p>Models run locally via PyTorch — zero API keys or cloud calls at runtime</p>
+      </div>
+      <div class="feat-card glass-card">
+        <div class="feat-icon green-grad">⚡</div>
+        <h3>Pivot Translation</h3>
+        <p>Auto-routes through English when a direct language pair model isn't available</p>
+      </div>
+    </section>
+
+    <footer class="footer">
+      LinguaAI &nbsp;·&nbsp; Helsinki-NLP/opus-mt &nbsp;·&nbsp; B.Tech CSE AI Mini Project &nbsp;·&nbsp; 2026
+    </footer>
+
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
